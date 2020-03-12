@@ -36,9 +36,6 @@ public class BaseSimpleGet {
         if (type.equals("sentence")) {
             return findCount(SENTENCE_PATTERN, text);
         }
-        /**
-         * Здесь я использовал сплит, так как это решение мне показалось легче
-         */
         else return text.split("\\\\n\\\\n").length;
     }
 
