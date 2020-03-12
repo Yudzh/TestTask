@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        tags = {"@JSON"},
+//        tags = {"@JSON"},
         features = "ApiTests/test/java/features",
         glue = "steps"
 )

@@ -17,7 +17,7 @@ public class BaseSimpleGet {
     public final static String REQUEST_FILTER = "https://fish-text.ru/get?format=%s&type=%s&number=%d";
     static Logger logger = LogManager.getLogger();
 
-    public static Response getResponce(String request) {
+    public static Response getResponse(String request) {
         return given().get(request);
     }
 
@@ -26,7 +26,7 @@ public class BaseSimpleGet {
         response.then().assertThat().statusCode(200);
     }
 
-    public static String getTextFromResponce(Response response) {
+    public static String getBodyFromResponse(Response response) {
         return response.getBody().prettyPrint();
     }
 
@@ -67,5 +67,9 @@ public class BaseSimpleGet {
 
     public static Object getContentOf(Response response, String tag) {
         return response.getBody().jsonPath().get(tag);
+    }
+
+    public static boolean isHtml(String body){
+        return body.startsWith("<html>");
     }
 }

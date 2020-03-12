@@ -16,40 +16,40 @@ public class GetSteps {
     public void sendRequest(Integer count, String type, String format) {
         log.info("Посылаем запрос");
         String request = String.format(BaseSimpleGet.REQUEST_FILTER, format, type, count);
-        response = BaseSimpleGet.getResponce(request);
+        response = BaseSimpleGet.getResponse(request);
     }
 
     @Тогда("проверяем получение {int} {string} как html")
     public void checkAnswerHtmlType(Integer count, String type) {
         BaseSimpleGet.checkStatus200(response);
-        String body = BaseSimpleGet.getTextFromResponce(response);
+        String body = BaseSimpleGet.getBodyFromResponse(response);
         log.info("Проверка на совпадение");
-        Assert.assertEquals(count, BaseSimpleGet.findCountInHTML(body, type));
-        Assert.assertTrue(body.startsWith("<html>"));
+        Assert.assertEquals("Не получено нужное кол-во " + type,count, BaseSimpleGet.findCountInHTML(body, type));
+        Assert.assertTrue("На выходе не получен HTML документ",BaseSimpleGet.isHtml(body));
     }
 
     @Тогда("проверяем получение {int} {string} как json")
     public void checkAnswerJsonType(Integer count, String type) {
         BaseSimpleGet.checkStatus200(response);
         log.info("Проверка на статус success");
-        Assert.assertEquals("success", BaseSimpleGet.getContentOf(response,"status"));
+        Assert.assertEquals("Не получен нужный статус","success", BaseSimpleGet.getContentOf(response,"status"));
 
         String body = (String) BaseSimpleGet.getContentOf(response,"text");
 
         log.info("Проверка на совпадение");
-        Assert.assertEquals(count, BaseSimpleGet.findCountInJSON(body, type));
+        Assert.assertEquals("Не получено нужное кол-во " + type,count, BaseSimpleGet.findCountInJSON(body, type));
     }
 
     @Тогда("получаем {string} в ответе")
     public void checkErrorHtml(String error) {
-        String body = BaseSimpleGet.getTextFromResponce(response);
-        Assert.assertTrue(body.contains(error));
+        String body = BaseSimpleGet.getBodyFromResponse(response);
+        Assert.assertTrue("Не получен нужный статус",body.contains(error));
     }
 
     @Тогда("получаем {string} в статусе c {int}")
     public void checkErrorJson(String error, Integer code) {
-        Assert.assertEquals("error", BaseSimpleGet.getContentOf(response,"status"));
-        Assert.assertEquals(error, BaseSimpleGet.getContentOf(response,"text"));
-        Assert.assertEquals(code,BaseSimpleGet.getContentOf(response,"errorCode"));
+        Assert.assertEquals("Не получен нужный статус","error", BaseSimpleGet.getContentOf(response,"status"));
+        Assert.assertEquals("Не получен нужный текст",error, BaseSimpleGet.getContentOf(response,"text"));
+        Assert.assertEquals("Не получен нужный код ошибки",code,BaseSimpleGet.getContentOf(response,"errorCode"));
     }
 }
